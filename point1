@@ -1,0 +1,72 @@
+import java.util.Scanner;
+
+
+public class point1 {
+
+	
+	private static Scanner input; 
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		
+		input = new Scanner ( System.in );
+		int x = 0;
+		int y = 0;
+		int z = 1; 
+			
+		
+		System.out.println("enter starting value for X: ");
+		
+		x = input.nextInt();    		
+		
+		System.out.println("enter starting value for Y: ");
+		
+		y = input.nextInt();
+		
+		System.out.println("enter string with directions: ");
+		
+		String info = input.next();
+		
+		System.out.println( "Starting point: (" + x + ", " + y + ")");
+		
+		
+		for (int i = 0; i < info.length(); i++) { 			// loop thru every char of the string 
+			
+			if ( info.charAt(i) == '~'){					// check if char is ~ and changes directions if true
+				
+				z = z*(-1);
+				
+			}
+			
+			switch (info.charAt(i)) {						// checking char and assigning values to X or Y
+			
+			
+			case '<': {
+				
+				x = x - z;
+				
+			}case '^': {
+				
+				y = y - z;
+				
+			}case 'v': {
+				
+				y = y + z;
+				
+			}case '>': {
+				
+				x = x + z;
+				
+			}default: {								
+					System.out.println("unsupported command: " + info.charAt(i));		// sled napraven testing se okaza,	
+			}			// che moje vseki edin ot "~^v<>" da ne byde "razpoznat" bez opredelena prichina.... 
+								
+			}
+
+		}
+		
+		System.out.println("End point: (" + x + ", " + y + ")");		
+	}
+
+}
