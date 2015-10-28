@@ -1,0 +1,124 @@
+import java.util.Scanner;
+
+
+public class point2 {
+	
+	private static Scanner input;
+	static String info;
+	static int count;
+	int pos;
+	static char a;
+	static char b;
+	static char c;
+	static char d;
+	
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		
+		
+		input = new Scanner ( System.in ); 
+		
+		System.out.println("Enter continious string with information: ");
+		
+		info = input.next();
+		
+		System.out.println("Enter 4 letter search word: ");
+		
+		String word = input.next();
+		
+		a = word.charAt(0);
+		b = word.charAt(1);
+		c = word.charAt(2);
+		d = word.charAt(3);
+		
+		
+		for (int i = 0; i < info.length(); i++) { 			// loop thru every char of the string 
+			
+			int x = (i + 4) % 4;
+			
+			if ( info.charAt(i) == a){					//position of first letter from word
+				
+				
+				switch (x) {
+				
+				case 0: {
+					
+					checkUD(i, b, c, d);
+					check1(i, b, c, d);
+					
+				}
+				case 1: {
+					
+					checkUD(i, b, c, d);
+				}
+				case 2: {
+					
+					checkUD(i, b, c, d);
+	
+				}
+				case 3: {
+					
+					checkUD(i, b, c, d);
+					check4(i, b, c, d);	
+	
+				}
+				}
+				
+			}
+
+			}
+		
+		System.out.println(count);
+		
+	}
+	
+	private static void check1(int p, char b, char c, char d){ // left to right column 1
+		
+		if (p > 12 && info.charAt(p-3) == b && info.charAt(p-6) == c && info.charAt(p-9) == d){			
+			
+			count ++;
+			
+		} else if ((p+3) < info.length() &&  info.charAt(p+1) == b && info.charAt(p+2) == c && info.charAt(p+3) == d){
+			
+			count ++;
+	
+		} else if ((p + 14) < info.length() && info.charAt(p+5) == b && info.charAt(p+10) == c && info.charAt(p+15) == d){
+			
+			count ++;
+	
+		} 
+		
+	}
+	
+private static void check4(int p, char b, char c, char d){ 	//right to left column 4
+	
+	if ( p + 8 < info.length() && info.charAt(p+3) == b && info.charAt(p+6) == c && info.charAt(p+9) == d){			
+		
+		count ++;
+		
+	} else if (p > 4 && info.charAt(p-1) == b && info.charAt(p-2) == c && info.charAt(p-3) == d){
+		
+		count ++;
+
+	} else if ( p > 12 && info.charAt(p-5) == b && info.charAt(p-10) == c && info.charAt(p-15) == d){
+		
+		count ++;
+
+	} 
+	}
+	
+	private static void checkUD(int p, char b, char c, char d){   //up-down check all columns
+			
+		if (p > 12 && info.charAt(p-4) == b && info.charAt(p-8) == c && info.charAt(p-12) == d){
+			
+			count ++;
+			
+		} else if ( (p + 12) < info.length() && info.charAt(p+4) == b && info.charAt(p+8) == c && info.charAt(p+12) == d){
+			
+			count ++;
+			
+		} 
+		
+	}
+}
