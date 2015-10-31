@@ -1,0 +1,152 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
+public class point3 {
+
+	private static Scanner sc;
+	private static Scanner ss;
+	static String dep1 = null;
+	static ArrayList<String> maindeps = new ArrayList<String>();
+	static ArrayList<String> alldeps = new ArrayList<String>();
+	static String path = "C:/hack BG/modules_installed/";
+	static Iterator <String> nd;
+	static File theDir;
+	static String line;
+	static ArrayList <String> dept = new ArrayList<String>();
+	
+	public static void main(String[] args) throws IOException {  
+		
+		readfile("dependencies");
+		
+	}
+	
+private static void readfile(String s) throws IOException{			
+		
+	  	ss = new Scanner(new FileInputStream("dependencies.json"));
+        maindeps.clear();
+
+        while(ss.hasNextLine()){
+            
+        	line = ss.nextLine();
+
+        	if(line.contains(s)){
+        		
+        		Pattern p = Pattern.compile("\"([^\"]*)\"");  // regex for txt inside quotes
+        		Matcher m = p.matcher( line );
+        		
+        		while( m.find()) {
+        			
+        			if(!m.group(1).equalsIgnoreCase(s)){
+
+            		maindeps.add(m.group(1));
+
+        			}	    			
+        		}
+        		
+        		foldercheck(maindeps);
+        	}
+        }
+}
+        
+private static void foldercheck (ArrayList<String> fdep) throws FileNotFoundException{ 
+		
+	if (!fdep.isEmpty()) {
+	
+		nd = fdep.iterator();
+		int k = 0, z = 0;
+		
+		while (nd.hasNext()){
+			
+			String f = nd.next();			
+			String pt = path + f;			
+			theDir = new File(pt);		
+			k++;
+			
+			if (theDir.exists()){
+				  
+				  System.out.println();
+				  System.out.println("module " + f + " already installed.");
+				  z++;
+				  
+			}else{
+				  
+				  System.out.println();
+				  System.out.println("module " + f + " will be installed.");
+				  new File(pt).mkdirs();
+				  
+			} 
+			
+		}
+
+	depcheck(fdep);
+
+	} else {
+		
+		System.out.println();
+		System.out.println("All needed modules were installed...");
+		
+	}
+}
+
+private static void depcheck (ArrayList <String> dep) throws FileNotFoundException {
+	
+	dept.clear();
+	dept.addAll(dep);
+	sc = new Scanner(new FileInputStream("all_packages.json"));    
+	alldeps.clear();
+
+    while(sc.hasNextLine()){
+
+    	line = sc.nextLine();
+    	nd = dept.iterator();
+    	
+    	while (nd.hasNext()){
+    		
+    		String f = nd.next();
+    		
+	    	if(line.startsWith(f, 1)){
+	    		
+	    		Pattern pp = Pattern.compile( "\"([^\"]*)\"" );
+	    		Matcher mm = pp.matcher( line );	    									
+	    		int j = 0;
+	    		
+	    		while(mm.find()){
+	    			
+	    			String pt = path + mm.group(1);			
+					theDir = new File(pt);
+					
+	    			if (j > 0 ){
+	    				
+	    				System.out.println(" " + mm.group(1));
+	    				String aa = mm.group(1);
+	    				alldeps.add(aa);
+	    				aa = null;
+	    				    				
+	    			}else if (j==0 && !mm.group(1).equalsIgnoreCase(f)){
+	    				
+	    				System.out.println();
+	    				System.out.print("in order " + f + " to function, we also need to install: " + mm.group(1));
+	    				j ++;
+	    				
+	    				String aa = mm.group(1);
+	    				alldeps.add(aa);
+	    				aa = null;
+	    				
+	    			}
+	    		}	
+	        }
+    	} 
+    }
+
+    foldercheck(alldeps);    
+ 
+}
+}
